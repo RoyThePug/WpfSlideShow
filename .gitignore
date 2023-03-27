@@ -1,0 +1,17 @@
+bin/
+obj/
+*.suo
+*.bak
+*.user
+packages/
+dummy.txt
+VersionInfo.cs
+ProductId.wxi
+.idea/
+# ReSharper files
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Visual Studio 2015 cache/options directory
+.vs/
+XQDAL.xml

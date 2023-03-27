@@ -1,0 +1,32 @@
+﻿<Window x:Class="WpfSlideShow.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ucWpfSlideShow="clr-namespace:WpfSlideShow.UserControl.UCWpfSlideShow"
+        xmlns:viewModel="clr-namespace:WpfSlideShow.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <viewModel:MainViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.8*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"></ColumnDefinition>
+            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+            <ColumnDefinition Width="0.1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ucWpfSlideShow:UCWpfSlideShowControl Grid.Row="1" Grid.Column="1"
+                                              ItemsSource="{Binding Pictures}"
+                                              AddImageCommand="{Binding AddImageCommand}"
+                                              RemoveImageCommand="{Binding RemoveImageCommand}"
+                                              ChooseLastSelectedItemCommand="{Binding ChooseLastSelectedItemCommand}"
+                                              ChooseFirstSelectedItemCommand="{Binding ChooseFirstSelectedItemCommand}"
+                                              RemoveLastItemCommand="{Binding RemoveLastItemCommand}"/>
+    </Grid>
+</Window>

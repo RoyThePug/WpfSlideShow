@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="WpfSlideShow.UserControl.UCWpfSlideShow.UCWpfSlideShowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:imageThumbnail="clr-namespace:WpfSlideShow.CustomControl.ImageThumbnail"
+             xmlns:imageItemsContainer="clr-namespace:WpfSlideShow.CustomControl.ImageItemsContainer"
+             xmlns:ucWpfSlideShow="clr-namespace:WpfSlideShow.UserControl.UCWpfSlideShow"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+
+        <Style TargetType="imageThumbnail:ImageThumbnailControl">
+            <Setter Property="Width" Value="39" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Source" Value="{Binding ImageSource}" />
+        </Style>
+
+        <ControlTemplate x:Key="newImageButtonTemplate" TargetType="{x:Type Button}">
+            <Border Name="bd" Width="35" Height="35"
+                    BorderBrush="Transparent"
+                    Padding="5,5,5,5"
+                    CornerRadius="2"
+                    BorderThickness="1" Background="Black">
+                <Image Margin="5">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <DrawingGroup>
+                                    <GeometryDrawing Brush="White"
+                                                     Geometry="M 7,0.666667C 3.09867,0.666667 0,3.76533 0,7.66667C 0,11.568 3.09867,14.6667 7,14.6667C 10.9013,14.6667 14,11.568 14,7.66667C 14,3.76533 10.9013,0.666667 7,0.666667 Z M 8,8.66667L 8,12.6667L 6,12.6667L 6,8.66667L 2,8.66667L 2,6.66667L 6,6.66667L 6,2.66667L 8,2.66667L 8,6.66667L 12,6.66667L 12,8.66667">
+                                    </GeometryDrawing>
+                                </DrawingGroup>
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
+            </Border>
+            <!-- <ControlTemplate.Triggers> -->
+            <!--     <Trigger Property="IsMouseOver" Value="true"> -->
+            <!--         <Setter TargetName="bd" Property="Background" Value="#404040" /> -->
+            <!--         <Setter TargetName="bd" Property="Cursor" Value="Hand" /> -->
+            <!--     </Trigger> -->
+            <!--     <Trigger Property="IsEnabled" Value="False"> -->
+            <!--         <Setter Property="Opacity" Value="0.25" /> -->
+            <!--     </Trigger> -->
+            <!-- </ControlTemplate.Triggers> -->
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="removeButtonTemplate" TargetType="{x:Type Button}">
+            <Border Name="bd" Width="16" Height="16" Margin="5"
+                    Background="Transparent">
+                <Grid>
+                    <Path Fill="White"
+                          Stretch="Fill" Data="M 8,0C 3.59867,0 0,3.59867 0,8C 0,12.4013 3.59867,16 8,16C 12.4013,16 16,12.4013 16,8C 16,3.59867 12.4013,0 8,0 Z M 4,12L 4,11M 4,5.00001L 4,4.00001M 11,4.00001L 12,4.00001" />
+                    <Path Fill="#919191"
+                          Stretch="Fill" Data="M 8,0C 3.59867,0 0,3.59867 0,8C 0,12.4013 3.59867,16 8,16C 12.4013,16 16,12.4013 16,8C 16,3.59867 12.4013,0 8,0 Z M 12,5L 9,8L 12,11L 12,12L 11,12L 8,9L 5,12L 4,12L 4,11L 7,8L 4,5L 4,4L 5,4L 8,7L 11,4L 12,4" />
+                </Grid>
+            </Border>
+        </ControlTemplate>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"></ColumnDefinition>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <imageItemsContainer:ImageItemsControl Background="Gray"
+                                               ItemsSource="{Binding ItemsSource,RelativeSource={RelativeSource AncestorType=ucWpfSlideShow:UCWpfSlideShowControl}}"
+                                               SelectedItem="{Binding SelectedImage, Mode=TwoWay}"
+                                               AddImageCommand="{Binding AddImageCommand, RelativeSource={RelativeSource AncestorType=ucWpfSlideShow:UCWpfSlideShowControl}}"
+                                               RemoveImageCommand="{Binding RemoveImageCommand ,RelativeSource={RelativeSource AncestorType=ucWpfSlideShow:UCWpfSlideShowControl}}"
+                                               NewImageButtonTemplate="{StaticResource newImageButtonTemplate}"
+                                               RemoveButtonTemplate="{StaticResource removeButtonTemplate}" />
+        <Grid Grid.Column="2">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Count:"></TextBlock>
+                    <TextBlock Margin="10,0,0,0" Text="{Binding Pictures.Count}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Width="120" Height="30" Content="Choose Last Item"
+                            VerticalAlignment="Center"
+                            Command="{Binding ChooseLastSelectedItemCommand, RelativeSource={RelativeSource AncestorType=ucWpfSlideShow:UCWpfSlideShowControl}}">
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Width="120" Height="30" Content="Choose First Item"
+                            VerticalAlignment="Center"
+                            Command="{Binding ChooseFirstSelectedItemCommand, RelativeSource={RelativeSource AncestorType=ucWpfSlideShow:UCWpfSlideShowControl}}">
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Width="120" Height="30" Content="Remove Last Item"
+                            VerticalAlignment="Center"
+                            Command="{Binding RemoveLastItemCommand, RelativeSource={RelativeSource AncestorType=ucWpfSlideShow:UCWpfSlideShowControl}}">
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
