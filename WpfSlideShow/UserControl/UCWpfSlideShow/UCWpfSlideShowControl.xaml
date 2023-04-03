@@ -58,6 +58,12 @@
                 </Grid>
             </Border>
         </ControlTemplate>
+        
+        <DataTemplate x:Key="emptyItemsTemplate">
+            <Grid Background="Gray" >
+                <TextBlock Text="No Images" Grid.Row="0" Foreground="Wheat" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            </Grid>
+        </DataTemplate>
 
     </UserControl.Resources>
 
@@ -74,7 +80,9 @@
                                                AddImageCommand="{Binding AddImageCommand, RelativeSource={RelativeSource AncestorType=ucWpfSlideShow:UCWpfSlideShowControl}}"
                                                RemoveImageCommand="{Binding RemoveImageCommand ,RelativeSource={RelativeSource AncestorType=ucWpfSlideShow:UCWpfSlideShowControl}}"
                                                NewImageButtonTemplate="{StaticResource newImageButtonTemplate}"
-                                               RemoveButtonTemplate="{StaticResource removeButtonTemplate}" />
+                                               RemoveButtonTemplate="{StaticResource removeButtonTemplate}" 
+                                               EmptyItemsTemplate="{StaticResource emptyItemsTemplate}">
+        </imageItemsContainer:ImageItemsControl>
         <Grid Grid.Column="2">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">

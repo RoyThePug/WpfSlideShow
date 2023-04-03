@@ -1,2 +1,2 @@
 # WpfSlideShow
-WPF app that demonstrating simple slide-show
+WPF app that demonstrats simple slide-show

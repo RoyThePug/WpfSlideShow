@@ -8,8 +8,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using WpfSlideShow.CustomAdorner;
 using WpfSlideShow.CustomControl.ImageThumbnail;
 
 namespace WpfSlideShow.CustomControl.ImageItemsContainer;
@@ -18,9 +20,13 @@ public class ImageItemsControl : Control
 {
     #region Field
 
+    private Grid _part_Grid_SelectedView;
+
     private System.Windows.Controls.ItemsControl _itemsControl;
 
     private ScrollViewer _scrollViewer;
+
+    private EmptyImagesAdorner _emptyImagesAdorner;
 
     private bool _scroolBusy;
 
@@ -117,6 +123,15 @@ public class ImageItemsControl : Control
         set => SetValue(RemoveButtonTemplateProperty, value);
     }
 
+    public static readonly DependencyProperty EmptyItemsTemplateProperty = DependencyProperty.Register(
+        nameof(EmptyItemsTemplate), typeof(DataTemplate), typeof(ImageItemsControl), new PropertyMetadata(default(ControlTemplate)));
+
+    public DataTemplate EmptyItemsTemplate
+    {
+        get => (DataTemplate) GetValue(EmptyItemsTemplateProperty);
+        set => SetValue(EmptyItemsTemplateProperty, value);
+    }
+
     public static readonly DependencyProperty AddImageCommandProperty = DependencyProperty.Register(
         nameof(AddImageCommand), typeof(ICommand), typeof(ImageItemsControl), new PropertyMetadata(default(ICommand)));
 
@@ -159,6 +174,20 @@ public class ImageItemsControl : Control
 
         _itemsControl = Template.FindName("PART_ItemsControl", this) as System.Windows.Controls.ItemsControl;
 
+        _part_Grid_SelectedView = Template.FindName("PART_Grid_SelectedView", this) as Grid;
+
+        if (_part_Grid_SelectedView != null)
+        {
+            var adornerLayer = AdornerLayer.GetAdornerLayer(_part_Grid_SelectedView);
+
+            if (adornerLayer != null && EmptyItemsTemplate != null)
+            {
+                _emptyImagesAdorner = new EmptyImagesAdorner(_part_Grid_SelectedView, EmptyItemsTemplate);
+
+                adornerLayer.Add(_emptyImagesAdorner);
+            }
+        }
+
         AddHandler(ImageThumbnailControl.IsActiveChangedEvent, new RoutedPropertyChangedEventHandler<ImageThumbnailControl>(RoutedPropertyChangedEventHandler));
         AddHandler(ImageThumbnailControl.AppearedEvent, new RoutedEventHandler(ImageThumbnailLoadedEventHandler));
 
@@ -172,7 +201,8 @@ public class ImageItemsControl : Control
         xqPanelItem.DataContext = dataContext;
 
         Items.Add(xqPanelItem);
-        // Debug.WriteLine(_moveItemIndex);
+       
+        UpdateEmptyAdornerVisualState();
     }
 
     protected virtual void Remove(object dataContext)
@@ -203,6 +233,8 @@ public class ImageItemsControl : Control
             }
 
             Items.Remove(currentItem);
+
+            UpdateEmptyAdornerVisualState();
         }
     }
 
@@ -237,6 +269,8 @@ public class ImageItemsControl : Control
             searchItem.IsSelected = true;
         }
     }
+
+    private void UpdateEmptyAdornerVisualState() => _emptyImagesAdorner.Visibility = Items.Any() ? Visibility.Collapsed : Visibility.Visible;
 
     #endregion
 

@@ -32,7 +32,10 @@ public partial class MainViewModel : ObservableObject
             new PictureViewModel(8, @"/WpfSlideShow;component/Image/8.png")
         };
 
-        SelectedImage = Pictures.Skip(1).FirstOrDefault()!.ImageSource;
+        if (Pictures.Any())
+        {
+            SelectedImage = Pictures.FirstOrDefault()!.ImageSource;
+        }
     }
 
     #region Command
